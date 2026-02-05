@@ -1,0 +1,48 @@
+{
+  "client": {
+    "slug": "house-of-hair",
+    "name": "House of Hair",
+    "description": "Professional hair salon in Alnwick"
+  },
+  "branding": {
+    "logo_url": "/static/logo.png",
+    "primary_color": "#8B4513",
+    "secondary_color": "#D2691E",
+    "font_family": "Inter, sans-serif"
+  },
+  "booking": {
+    "mode": "slots",
+    "staff_enabled": true,
+    "any_staff_enabled": true,
+    "advance_booking_days": 30,
+    "slot_duration_minutes": 15,
+    "business_hours": {
+      "monday": {"open": "09:00", "close": "17:00"},
+      "tuesday": {"open": "09:00", "close": "17:00"},
+      "wednesday": {"open": "09:00", "close": "17:00"},
+      "thursday": {"open": "09:00", "close": "17:00"},
+      "friday": {"open": "09:00", "close": "18:00"},
+      "saturday": {"open": "09:00", "close": "16:00"},
+      "sunday": {"open": null, "close": null}
+    }
+  },
+  "features": {
+    "sms_enabled": false,
+    "email_enabled": true,
+    "portal_enabled": true,
+    "waitlist_enabled": true,
+    "capacity_enabled": false
+  },
+  "cancellation": {
+    "allowed": true,
+    "min_hours_notice": 24,
+    "fee_percentage": 0
+  },
+  "database": {
+    "name": "house_of_hair_db",
+    "port": 5432
+  },
+  "server": {
+    "port": 8001
+  }
+}
