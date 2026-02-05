@@ -162,4 +162,5 @@ EMAIL_HOST_USER = 'toby@nbnesigns.com'
 EMAIL_HOST_PASSWORD = '!49Monkswood'
 DEFAULT_FROM_EMAIL = 'toby@nbnesigns.com'
 EMAIL_SUBJECT_PREFIX = '[House of Hair] '
+EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
 
