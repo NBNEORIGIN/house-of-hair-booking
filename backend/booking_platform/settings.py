@@ -132,7 +132,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CORS settings for frontend
-CORS_ALLOWED_ORIGINS = [`n    "http://localhost:3001",`n    "http://127.0.0.1:3001",`n    "https://house-of-hair-booking-g3w22c8pm-tobys-projects-496c16c0.vercel.app",`n    "https://house-of-hair-booking.vercel.app",`n]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "https://house-of-hair-booking-g3w22c8pm-tobys-projects-496c16c0.vercel.app",
+    "https://house-of-hair-booking.vercel.app",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
