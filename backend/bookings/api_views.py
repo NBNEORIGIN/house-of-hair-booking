@@ -120,16 +120,17 @@ class BookingViewSet(viewsets.ModelViewSet):
                         try:
                             print(f"[EMAIL] Starting email send to {client.email}")
                             
-                            # Use Mailgun HTTP API instead of SMTP (Railway blocks SMTP ports)
-                            import requests
+                            # Use Resend HTTP API (Railway blocks SMTP, Resend is free)
+                            import resend
                             from django.conf import settings
                             
-                            mailgun_api_key = getattr(settings, 'MAILGUN_API_KEY', None)
-                            mailgun_domain = getattr(settings, 'MAILGUN_DOMAIN', None)
+                            resend_api_key = getattr(settings, 'RESEND_API_KEY', None)
                             
-                            if not mailgun_api_key or not mailgun_domain:
-                                print(f"[EMAIL] Mailgun not configured, skipping email")
+                            if not resend_api_key:
+                                print(f"[EMAIL] Resend not configured, skipping email")
                                 return
+                            
+                            resend.api_key = resend_api_key
                             
                             subject = f'Booking Confirmation - {service.name}'
                             message = f"""Dear {client.name},
@@ -152,22 +153,15 @@ Thank you,
 House of Hair
 67 Bondgate Within, Alnwick, NE66 1HZ"""
                             
-                            response = requests.post(
-                                f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
-                                auth=("api", mailgun_api_key),
-                                data={
-                                    "from": f"House of Hair <mailgun@{mailgun_domain}>",
-                                    "to": [client.email],
-                                    "subject": subject,
-                                    "text": message
-                                },
-                                timeout=10
-                            )
+                            params = {
+                                "from": "House of Hair <onboarding@resend.dev>",
+                                "to": [client.email],
+                                "subject": subject,
+                                "text": message
+                            }
                             
-                            if response.status_code == 200:
-                                print(f"[EMAIL] Successfully sent to {client.email}")
-                            else:
-                                print(f"[EMAIL] Failed: {response.status_code} - {response.text}")
+                            email = resend.Emails.send(params)
+                            print(f"[EMAIL] Successfully sent to {client.email}, ID: {email.get('id')}")
                         except Exception as e:
                             print(f"[EMAIL] ERROR: {type(e).__name__}: {str(e)}")
                             import traceback

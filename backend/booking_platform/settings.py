@@ -173,6 +173,5 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='toby@nbnesigns.com')
 EMAIL_SUBJECT_PREFIX = '[House of Hair] '
 EMAIL_TIMEOUT = 5  # 5 second timeout
 
-# Mailgun HTTP API (Railway blocks SMTP ports)
-MAILGUN_API_KEY = config('MAILGUN_API_KEY', default='')
-MAILGUN_DOMAIN = config('MAILGUN_DOMAIN', default='')
+# Resend HTTP API (Railway blocks SMTP, Resend is free)
+RESEND_API_KEY = config('RESEND_API_KEY', default='')
