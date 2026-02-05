@@ -168,6 +168,7 @@ export default function CompactBookingPage() {
   return (
     <div className="booking-container">
       <div className="booking-header">
+        <img src="/logo.png" alt="House of Hair" style={{ height: '80px', marginBottom: '10px' }} />
         <h1>House of Hair</h1>
         <p>Professional Hair Salon - Book Your Appointment</p>
       </div>
