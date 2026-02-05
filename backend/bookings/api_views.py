@@ -93,14 +93,33 @@ class BookingViewSet(viewsets.ModelViewSet):
                     notes=notes
                 )
                 
-                # Send confirmation email
-                print('DEBUG: About to send confirmation email...')
+                # Prepare response data first
+                response_data = {
+                    'id': booking.id,
+                    'client': booking.client.id,
+                    'client_name': booking.client.name,
+                    'service': booking.service.id,
+                    'service_name': booking.service.name,
+                    'staff': booking.staff.id,
+                    'staff_name': booking.staff.name,
+                    'start_time': booking.start_time.isoformat(),
+                    'end_time': booking.end_time.isoformat(),
+                    'status': booking.status,
+                    'notes': booking.notes,
+                    'created_at': booking.created_at.isoformat(),
+                    'updated_at': booking.updated_at.isoformat(),
+                }
+                
+                # Send confirmation email asynchronously (don't block response)
                 try:
                     from django.core.mail import send_mail
                     from django.conf import settings
+                    import threading
                     
-                    subject = f'Booking Confirmation - {service.name}'
-                    message = f"""
+                    def send_email_async():
+                        try:
+                            subject = f'Booking Confirmation - {service.name}'
+                            message = f"""
 Dear {client.name},
 
 Your appointment has been confirmed!
@@ -119,37 +138,27 @@ If you need to cancel or reschedule, please contact us.
 
 Thank you,
 House of Hair
-                    """
+67 Bondgate Within, Alnwick, NE66 1HZ
+                            """
+                            
+                            send_mail(
+                                subject,
+                                message,
+                                settings.DEFAULT_FROM_EMAIL,
+                                [client.email],
+                                fail_silently=True,
+                            )
+                        except Exception as e:
+                            print(f"Failed to send confirmation email: {e}")
                     
-                    print(f'DEBUG: Sending email to {client.email}')
-                    send_mail(
-                        subject,
-                        message,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [client.email],
-                        fail_silently=False,
-                    )
-                    print('DEBUG: Email sent successfully!')
+                    # Start email sending in background thread
+                    email_thread = threading.Thread(target=send_email_async)
+                    email_thread.daemon = True
+                    email_thread.start()
                 except Exception as e:
-                    # Log error but don't fail the booking
-                    print(f"Failed to send confirmation email: {e}")
+                    print(f"Failed to start email thread: {e}")
                 
-                # Return booking data
-                response_data = {
-                    'id': booking.id,
-                    'client': booking.client.id,
-                    'client_name': booking.client.name,
-                    'service': booking.service.id,
-                    'service_name': booking.service.name,
-                    'staff': booking.staff.id,
-                    'staff_name': booking.staff.name,
-                    'start_time': booking.start_time.isoformat(),
-                    'end_time': booking.end_time.isoformat(),
-                    'status': booking.status,
-                    'notes': booking.notes,
-                    'created_at': booking.created_at.isoformat(),
-                    'updated_at': booking.updated_at.isoformat(),
-                }
+                # Return booking data immediately
                 return Response(response_data, status=status.HTTP_201_CREATED)
             
         except (Staff.DoesNotExist, Service.DoesNotExist):
