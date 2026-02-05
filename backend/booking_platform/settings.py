@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key-change-in-pro
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,house-of-hair-booking-production.up.railway.app', cast=Csv())
 
 
 # Application definition
@@ -138,6 +138,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3001",
     "https://house-of-hair-booking-g3w22c8pm-tobys-projects-496c16c0.vercel.app",
     "https://house-of-hair-booking.vercel.app",
+    "https://house-of-hair-booking-production.up.railway.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
