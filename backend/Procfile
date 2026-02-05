@@ -1,0 +1,2 @@
+release: python manage.py migrate
+web: gunicorn booking_platform.wsgi --bind 0.0.0.0:$PORT
