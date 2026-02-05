@@ -163,12 +163,12 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Email configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.ionos.co.uk'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'toby@nbnesigns.com'
-EMAIL_HOST_PASSWORD = '!49Monkswood'
-DEFAULT_FROM_EMAIL = 'toby@nbnesigns.com'
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.ionos.co.uk')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='toby@nbnesigns.com')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='toby@nbnesigns.com')
 EMAIL_SUBJECT_PREFIX = '[House of Hair] '
-EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
+EMAIL_TIMEOUT = 5  # 5 second timeout
