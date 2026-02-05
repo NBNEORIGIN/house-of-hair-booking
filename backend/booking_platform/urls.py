@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from bookings.api_views import ServiceViewSet, StaffViewSet, BookingViewSet, ClientViewSet, available_slots
+from bookings.api_views import ServiceViewSet, StaffViewSet, BookingViewSet, ClientViewSet
 from bookings.views_schedule import BusinessHoursViewSet, StaffScheduleViewSet, ClosureViewSet, StaffLeaveViewSet
 
 router = DefaultRouter()
@@ -34,9 +34,4 @@ router.register(r'staff-leave', StaffLeaveViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/slots/', available_slots, name='available-slots'),
-    path('api/', include('core.api_urls')),
-    path('api/', include('bookings.api_urls')),
-    path('', include('bookings.urls')),
-    path('', include('core.urls')),
 ]
