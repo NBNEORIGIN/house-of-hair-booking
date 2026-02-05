@@ -27,6 +27,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
+  const [viewingBooking, setViewingBooking] = useState<Booking | null>(null)
 
   useEffect(() => {
     fetchBookings()
@@ -63,6 +64,35 @@ export default function AdminDashboard() {
     }
   }
 
+  const exportToCSV = () => {
+    const headers = ['ID', 'Client Name', 'Email', 'Phone', 'Service', 'Staff', 'Date', 'Time', 'Status', 'Price', 'Notes']
+    const rows = filteredBookings.map(b => [
+      b.id,
+      b.client_name,
+      b.client_email,
+      b.client_phone,
+      b.service_name,
+      b.staff_name,
+      format(new Date(b.start_time), 'MMM d, yyyy'),
+      format(new Date(b.start_time), 'h:mm a'),
+      b.status,
+      `£${b.price}`,
+      b.notes || ''
+    ])
+    
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n')
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `bookings-${format(new Date(), 'yyyy-MM-dd')}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
   if (loading) {
     return (
       <div className="admin-container">
@@ -82,13 +112,22 @@ export default function AdminDashboard() {
       </div>
 
       <div className="admin-content">
-        <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
+        <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
           <Link href="/admin/services" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
             Manage Services
           </Link>
           <Link href="/admin/staff" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
             Manage Staff
           </Link>
+          <Link href="/admin/clients" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
+            Client Database
+          </Link>
+          <button 
+            onClick={exportToCSV}
+            style={{ background: '#4CAF50', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '500' }}
+          >
+            Export to CSV
+          </button>
         </div>
 
         <div className="stats-grid">
@@ -191,7 +230,12 @@ export default function AdminDashboard() {
                       </td>
                       <td>£{booking.price}</td>
                       <td>
-                        <button className="action-btn">View</button>
+                        <button 
+                          className="action-btn"
+                          onClick={() => setViewingBooking(booking)}
+                        >
+                          View
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -205,6 +249,68 @@ export default function AdminDashboard() {
       <div className="admin-footer">
         <p>67 Bondgate Within, Alnwick, NE66 1HZ</p>
       </div>
+
+      {viewingBooking && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', maxWidth: '600px', width: '90%', maxHeight: '90vh', overflow: 'auto' }}>
+            <h2 style={{ marginTop: 0, color: '#8B6F47' }}>Booking Details</h2>
+            <div style={{ display: 'grid', gap: '20px', marginTop: '20px' }}>
+              <div>
+                <strong>Booking ID:</strong> #{viewingBooking.id}
+              </div>
+              <div>
+                <strong>Client Name:</strong> {viewingBooking.client_name}
+              </div>
+              <div>
+                <strong>Email:</strong> {viewingBooking.client_email}
+              </div>
+              <div>
+                <strong>Phone:</strong> {viewingBooking.client_phone}
+              </div>
+              <div>
+                <strong>Service:</strong> {viewingBooking.service_name}
+              </div>
+              <div>
+                <strong>Staff Member:</strong> {viewingBooking.staff_name}
+              </div>
+              <div>
+                <strong>Date:</strong> {format(new Date(viewingBooking.start_time), 'EEEE, MMMM d, yyyy')}
+              </div>
+              <div>
+                <strong>Time:</strong> {format(new Date(viewingBooking.start_time), 'h:mm a')} - {format(new Date(viewingBooking.end_time), 'h:mm a')}
+              </div>
+              <div>
+                <strong>Status:</strong> <span style={{ 
+                  padding: '4px 12px', 
+                  borderRadius: '20px', 
+                  background: getStatusColor(viewingBooking.status),
+                  color: 'white',
+                  fontSize: '0.85em'
+                }}>
+                  {viewingBooking.status}
+                </span>
+              </div>
+              <div>
+                <strong>Price:</strong> £{viewingBooking.price}
+              </div>
+              {viewingBooking.notes && (
+                <div>
+                  <strong>Notes:</strong> {viewingBooking.notes}
+                </div>
+              )}
+              <div>
+                <strong>Created:</strong> {format(new Date(viewingBooking.created_at), 'MMM d, yyyy h:mm a')}
+              </div>
+            </div>
+            <button 
+              onClick={() => setViewingBooking(null)}
+              style={{ marginTop: '30px', background: '#8B6F47', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', width: '100%' }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
