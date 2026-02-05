@@ -153,8 +153,11 @@ Thank you,
 House of Hair
 67 Bondgate Within, Alnwick, NE66 1HZ"""
                             
+                            # Use configured from address (must be from verified domain)
+                            from_email = getattr(settings, 'RESEND_FROM_EMAIL', 'onboarding@resend.dev')
+                            
                             params = {
-                                "from": "House of Hair <onboarding@resend.dev>",
+                                "from": f"House of Hair <{from_email}>",
                                 "to": [client.email],
                                 "subject": subject,
                                 "text": message
