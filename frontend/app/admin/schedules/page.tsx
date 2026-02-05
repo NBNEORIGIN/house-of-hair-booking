@@ -55,21 +55,28 @@ export default function ScheduleManagement() {
 
   const fetchData = async () => {
     try {
-      const [staffRes, closuresRes] = await Promise.all([
+      const [staffRes, closuresRes, businessHoursRes] = await Promise.all([
         fetch(`${API_BASE}/staff/`),
-        fetch(`${API_BASE}/closures/`).catch(() => ({ json: () => [] }))
+        fetch(`${API_BASE}/closures/`).catch(() => ({ json: async () => [] })),
+        fetch(`${API_BASE}/business-hours/`).catch(() => ({ json: async () => [] }))
       ])
       
       const staffData = await staffRes.json()
       const closuresData = await closuresRes.json()
+      const businessHoursData = await businessHoursRes.json()
       
       setStaff(staffData)
       setClosures(Array.isArray(closuresData) ? closuresData : [])
       
-      // Initialize business hours if not exists
-      initializeBusinessHours()
+      // Initialize business hours from API or create defaults
+      if (businessHoursData && businessHoursData.length > 0) {
+        setBusinessHours(businessHoursData)
+      } else {
+        initializeBusinessHours()
+      }
     } catch (error) {
       console.error('Failed to fetch data:', error)
+      initializeBusinessHours()
     } finally {
       setLoading(false)
     }
