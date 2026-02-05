@@ -155,6 +155,12 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 
+# CSRF trusted origins for admin
+CSRF_TRUSTED_ORIGINS = [
+    'https://house-of-hair-booking-production.up.railway.app',
+    'https://house-of-hair-booking.vercel.app',
+]
+
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.ionos.co.uk'
