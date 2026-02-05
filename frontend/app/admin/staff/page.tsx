@@ -60,9 +60,10 @@ export default function StaffManagement() {
       name: formData.get('name'),
       email: formData.get('email'),
       phone: formData.get('phone') || '',
+      photo_url: formData.get('photo_url') || '',
       bio: formData.get('bio') || '',
       active: formData.get('active') === 'on',
-      services: selectedServices
+      service_ids: selectedServices
     }
 
     try {
@@ -172,6 +173,17 @@ export default function StaffManagement() {
                   </div>
                 </div>
                 <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Photo URL</label>
+                  <input 
+                    type="url" 
+                    name="photo_url" 
+                    defaultValue={editingStaff?.photo_url}
+                    placeholder="https://example.com/photo.jpg"
+                    style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
+                  />
+                  <small style={{ color: '#666', fontSize: '0.85rem' }}>Enter a URL to a staff member photo</small>
+                </div>
+                <div>
                   <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Bio</label>
                   <textarea 
                     name="bio" 
@@ -185,7 +197,7 @@ export default function StaffManagement() {
                   <select 
                     name="services" 
                     multiple 
-                    defaultValue={editingStaff?.services.map(String)}
+                    defaultValue={editingStaff?.services?.map(String) || []}
                     style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', minHeight: '120px' }}
                   >
                     {services.map(service => (
