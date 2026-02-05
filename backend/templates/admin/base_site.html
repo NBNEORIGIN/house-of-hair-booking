@@ -1,0 +1,108 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | House of Hair Admin{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'admin/img/logo.png' %}" alt="House of Hair" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+        <span style="color: #8B4513; font-family: 'Georgia', serif; font-size: 1.3em;">House of Hair</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* House of Hair brand colors */
+    :root {
+        --primary-color: #8B4513;
+        --secondary-color: #D2691E;
+        --accent-color: #F5DEB3;
+    }
+    
+    /* Header styling */
+    #header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+    }
+    
+    #site-name a {
+        color: white;
+        text-decoration: none;
+    }
+    
+    #site-name a:hover {
+        color: var(--accent-color);
+    }
+    
+    /* Breadcrumbs */
+    div.breadcrumbs {
+        background: var(--accent-color);
+        color: var(--primary-color);
+    }
+    
+    div.breadcrumbs a {
+        color: var(--primary-color);
+    }
+    
+    /* Buttons */
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: var(--primary-color);
+        border: none;
+    }
+    
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+        background: var(--secondary-color);
+    }
+    
+    /* Links */
+    a:link, a:visited {
+        color: var(--primary-color);
+    }
+    
+    a:hover {
+        color: var(--secondary-color);
+    }
+    
+    /* Module headers */
+    .module h2, .module caption, .inline-group h2 {
+        background: var(--primary-color);
+    }
+    
+    /* Selected items */
+    .selector-chosen h2 {
+        background: var(--primary-color);
+    }
+    
+    /* Calendar */
+    .calendarbox .calendarnav-previous, .calendarbox .calendarnav-next {
+        background: var(--primary-color);
+    }
+    
+    /* Object tools */
+    .object-tools a {
+        background: var(--primary-color);
+    }
+    
+    .object-tools a:hover {
+        background: var(--secondary-color);
+    }
+    
+    /* Changelist filters */
+    #changelist-filter li.selected a {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+    
+    /* Login page */
+    .login #header h1 {
+        margin: 0;
+    }
+    
+    .login #header h1 a {
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}
