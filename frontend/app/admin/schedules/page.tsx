@@ -55,17 +55,24 @@ export default function ScheduleManagement() {
 
   const fetchData = async () => {
     try {
+      console.log('Fetching data from:', API_BASE)
+      
       const [staffRes, closuresRes, businessHoursRes] = await Promise.all([
         fetch(`${API_BASE}/staff/`),
-        fetch(`${API_BASE}/closures/`).catch(() => ({ json: async () => [] })),
-        fetch(`${API_BASE}/business-hours/`).catch(() => ({ json: async () => [] }))
+        fetch(`${API_BASE}/closures/`).catch(() => ({ ok: false, json: async () => [] })),
+        fetch(`${API_BASE}/business-hours/`).catch(() => ({ ok: false, json: async () => [] }))
       ])
+      
+      console.log('Staff response status:', staffRes.status)
       
       const staffData = await staffRes.json()
       const closuresData = await closuresRes.json()
       const businessHoursData = await businessHoursRes.json()
       
-      setStaff(staffData)
+      console.log('Staff data:', staffData)
+      console.log('Business hours data:', businessHoursData)
+      
+      setStaff(Array.isArray(staffData) ? staffData : [])
       setClosures(Array.isArray(closuresData) ? closuresData : [])
       
       // Initialize business hours from API or create defaults
@@ -100,22 +107,38 @@ export default function ScheduleManagement() {
 
   const saveBusinessHours = async () => {
     try {
+      console.log('Saving business hours:', businessHours)
+      
       for (const hours of businessHours) {
         const method = hours.id ? 'PUT' : 'POST'
         const url = hours.id 
           ? `${API_BASE}/business-hours/${hours.id}/`
           : `${API_BASE}/business-hours/`
         
-        await fetch(url, {
+        console.log(`${method} ${url}`, hours)
+        
+        const response = await fetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(hours)
         })
+        
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error('Save failed:', response.status, errorText)
+          throw new Error(`Failed to save: ${response.status}`)
+        }
+        
+        const savedData = await response.json()
+        console.log('Saved:', savedData)
       }
+      
       alert('Business hours saved successfully!')
+      // Refetch to get updated data with IDs
+      await fetchData()
     } catch (error) {
       console.error('Failed to save business hours:', error)
-      alert('Failed to save business hours')
+      alert('Failed to save business hours: ' + error)
     }
   }
 
