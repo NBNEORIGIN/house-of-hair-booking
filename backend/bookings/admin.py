@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from django.db.models import Count, Sum, Q
+from django.utils.html import format_html
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.db.models import Count, Q, Sum
 import csv
-from datetime import datetime
-from .models import Service, Staff, Client, Booking, Session
+from datetime import datetime, timedelta
+from .models import Service, Staff, Client, Booking, BusinessHours, StaffSchedule, Closure, StaffLeave, Session
 
 
 @admin.register(Service)
@@ -140,3 +143,42 @@ class SessionAdmin(admin.ModelAdmin):
     search_fields = ['title', 'description']
     filter_horizontal = ['enrolled_clients']
     readonly_fields = ['enrollment_count', 'is_full', 'available_spots', 'created_at', 'updated_at']
+
+
+@admin.register(BusinessHours)
+class BusinessHoursAdmin(admin.ModelAdmin):
+    list_display = ['day_name', 'is_open', 'open_time', 'close_time']
+    list_editable = ['is_open', 'open_time', 'close_time']
+    ordering = ['day_of_week']
+    
+    def day_name(self, obj):
+        return dict(BusinessHours.DAYS_OF_WEEK)[obj.day_of_week]
+    day_name.short_description = 'Day'
+
+
+@admin.register(StaffSchedule)
+class StaffScheduleAdmin(admin.ModelAdmin):
+    list_display = ['staff', 'day_name', 'is_working', 'start_time', 'end_time']
+    list_filter = ['staff', 'day_of_week', 'is_working']
+    list_editable = ['is_working', 'start_time', 'end_time']
+    ordering = ['staff', 'day_of_week']
+    
+    def day_name(self, obj):
+        return dict(StaffSchedule.DAYS_OF_WEEK)[obj.day_of_week]
+    day_name.short_description = 'Day'
+
+
+@admin.register(Closure)
+class ClosureAdmin(admin.ModelAdmin):
+    list_display = ['date', 'reason', 'all_day', 'start_time', 'end_time']
+    list_filter = ['all_day', 'date']
+    date_hierarchy = 'date'
+    ordering = ['-date']
+
+
+@admin.register(StaffLeave)
+class StaffLeaveAdmin(admin.ModelAdmin):
+    list_display = ['staff', 'start_date', 'end_date', 'reason']
+    list_filter = ['staff', 'start_date']
+    date_hierarchy = 'start_date'
+    ordering = ['-start_date']

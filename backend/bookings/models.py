@@ -78,7 +78,7 @@ class Booking(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.client.name} - {self.service.name} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
+        return f"{self.client.name} - {self.service.name} with {self.staff.name} on {self.start_time.strftime('%Y-%m-%d %H:%M')}"
 
     def save(self, *args, **kwargs):
         if not self.end_time:
