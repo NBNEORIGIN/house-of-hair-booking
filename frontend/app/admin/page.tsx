@@ -119,6 +119,9 @@ export default function AdminDashboard() {
           <Link href="/admin/staff" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
             Manage Staff
           </Link>
+          <Link href="/admin/schedules" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
+            Opening Hours & Schedules
+          </Link>
           <Link href="/admin/clients" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
             Client Database
           </Link>
