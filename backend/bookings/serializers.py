@@ -10,10 +10,17 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class StaffSerializer(serializers.ModelSerializer):
     services = ServiceSerializer(many=True, read_only=True)
-    
+    service_ids = serializers.PrimaryKeyRelatedField(
+        many=True, 
+        queryset=Service.objects.all(), 
+        source='services', 
+        write_only=True,
+        required=False
+    )
+
     class Meta:
         model = Staff
-        fields = ['id', 'name', 'email', 'phone', 'services', 'active', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'email', 'phone', 'photo_url', 'services', 'service_ids', 'active', 'created_at', 'updated_at']
 
 
 class ClientSerializer(serializers.ModelSerializer):
