@@ -119,12 +119,20 @@ class BookingViewSet(viewsets.ModelViewSet):
                     def send_email_async():
                         try:
                             print(f"[EMAIL] Starting email send to {client.email}")
-                            print(f"[EMAIL] Using SMTP: {settings.EMAIL_HOST}:{settings.EMAIL_PORT}")
-                            print(f"[EMAIL] From: {settings.DEFAULT_FROM_EMAIL}")
+                            
+                            # Use Mailgun HTTP API instead of SMTP (Railway blocks SMTP ports)
+                            import requests
+                            from django.conf import settings
+                            
+                            mailgun_api_key = getattr(settings, 'MAILGUN_API_KEY', None)
+                            mailgun_domain = getattr(settings, 'MAILGUN_DOMAIN', None)
+                            
+                            if not mailgun_api_key or not mailgun_domain:
+                                print(f"[EMAIL] Mailgun not configured, skipping email")
+                                return
                             
                             subject = f'Booking Confirmation - {service.name}'
-                            message = f"""
-Dear {client.name},
+                            message = f"""Dear {client.name},
 
 Your appointment has been confirmed!
 
@@ -142,17 +150,24 @@ If you need to cancel or reschedule, please contact us.
 
 Thank you,
 House of Hair
-67 Bondgate Within, Alnwick, NE66 1HZ
-                            """
+67 Bondgate Within, Alnwick, NE66 1HZ"""
                             
-                            send_mail(
-                                subject,
-                                message,
-                                settings.DEFAULT_FROM_EMAIL,
-                                [client.email],
-                                fail_silently=False,
+                            response = requests.post(
+                                f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
+                                auth=("api", mailgun_api_key),
+                                data={
+                                    "from": f"House of Hair <mailgun@{mailgun_domain}>",
+                                    "to": [client.email],
+                                    "subject": subject,
+                                    "text": message
+                                },
+                                timeout=10
                             )
-                            print(f"[EMAIL] Successfully sent to {client.email}")
+                            
+                            if response.status_code == 200:
+                                print(f"[EMAIL] Successfully sent to {client.email}")
+                            else:
+                                print(f"[EMAIL] Failed: {response.status_code} - {response.text}")
                         except Exception as e:
                             print(f"[EMAIL] ERROR: {type(e).__name__}: {str(e)}")
                             import traceback
