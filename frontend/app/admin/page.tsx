@@ -2,6 +2,7 @@
 // House of Hair Admin Dashboard
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
+import Link from 'next/link'
 import './admin.css'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8001/api'
@@ -81,6 +82,15 @@ export default function AdminDashboard() {
       </div>
 
       <div className="admin-content">
+        <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
+          <Link href="/admin/services" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
+            Manage Services
+          </Link>
+          <Link href="/admin/staff" style={{ background: '#8B6F47', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '500' }}>
+            Manage Staff
+          </Link>
+        </div>
+
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-number">{bookings.length}</div>
