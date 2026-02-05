@@ -32,6 +32,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,house-of-ha
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,10 +61,11 @@ ROOT_URLCONF = "booking_platform.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates", BASE_DIR / "templates/admin"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -172,3 +174,5 @@ DEFAULT_FROM_EMAIL = 'toby@nbnesigns.com'
 EMAIL_SUBJECT_PREFIX = '[House of Hair] '
 EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
 
+# Jazzmin admin theme settings
+from .jazzmin_settings import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
