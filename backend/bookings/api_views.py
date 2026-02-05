@@ -118,6 +118,10 @@ class BookingViewSet(viewsets.ModelViewSet):
                     
                     def send_email_async():
                         try:
+                            print(f"[EMAIL] Starting email send to {client.email}")
+                            print(f"[EMAIL] Using SMTP: {settings.EMAIL_HOST}:{settings.EMAIL_PORT}")
+                            print(f"[EMAIL] From: {settings.DEFAULT_FROM_EMAIL}")
+                            
                             subject = f'Booking Confirmation - {service.name}'
                             message = f"""
 Dear {client.name},
@@ -146,10 +150,13 @@ House of Hair
                                 message,
                                 settings.DEFAULT_FROM_EMAIL,
                                 [client.email],
-                                fail_silently=True,
+                                fail_silently=False,
                             )
+                            print(f"[EMAIL] Successfully sent to {client.email}")
                         except Exception as e:
-                            print(f"Failed to send confirmation email: {e}")
+                            print(f"[EMAIL] ERROR: {type(e).__name__}: {str(e)}")
+                            import traceback
+                            print(f"[EMAIL] Traceback: {traceback.format_exc()}")
                     
                     # Start email sending in background thread
                     email_thread = threading.Thread(target=send_email_async)
