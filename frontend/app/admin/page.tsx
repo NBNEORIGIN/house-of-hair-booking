@@ -1,5 +1,5 @@
 'use client'
-
+// House of Hair Admin Dashboard
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import './admin.css'
