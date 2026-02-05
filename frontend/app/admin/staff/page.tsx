@@ -200,7 +200,7 @@ export default function StaffManagement() {
                     defaultValue={editingStaff?.services?.map(String) || []}
                     style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', minHeight: '120px' }}
                   >
-                    {services.map(service => (
+                    {(services || []).map(service => (
                       <option key={service.id} value={service.id}>
                         {service.name}
                       </option>
@@ -252,7 +252,7 @@ export default function StaffManagement() {
                   <td style={{ fontWeight: '500' }}>{member.name}</td>
                   <td>{member.email}</td>
                   <td>{member.phone || '-'}</td>
-                  <td>{getServiceNames(member.services) || 'None'}</td>
+                  <td>{getServiceNames(member.services || []) || 'None'}</td>
                   <td>
                     <span style={{ 
                       padding: '4px 12px', 
@@ -274,7 +274,7 @@ export default function StaffManagement() {
                         Edit
                       </button>
                       <button 
-                        onClick={() => handleDelete(member.id)}
+                        onClick={() => member.id && handleDelete(member.id)}
                         style={{ background: '#F44336', color: 'white', padding: '6px 12px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
                       >
                         Delete
