@@ -32,7 +32,6 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,house-of-ha
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -173,6 +172,3 @@ EMAIL_HOST_PASSWORD = '!49Monkswood'
 DEFAULT_FROM_EMAIL = 'toby@nbnesigns.com'
 EMAIL_SUBJECT_PREFIX = '[House of Hair] '
 EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
-
-# Jazzmin admin theme settings
-from .jazzmin_settings import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS

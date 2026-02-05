@@ -1,108 +1,105 @@
 {% extends "admin/base.html" %}
 {% load static %}
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | House of Hair Admin{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | House of Hair{% endblock %}
 
 {% block branding %}
-<div id="site-name">
+<h1 id="site-name">
     <a href="{% url 'admin:index' %}">
-        <img src="{% static 'admin/img/logo.png' %}" alt="House of Hair" style="height: 40px; vertical-align: middle; margin-right: 10px;">
-        <span style="color: #8B4513; font-family: 'Georgia', serif; font-size: 1.3em;">House of Hair</span>
+        <img src="{% static 'admin/img/logo.png' %}" alt="House of Hair" style="height: 35px; vertical-align: middle; margin-right: 12px;">
+        House of Hair Management
     </a>
-</div>
+</h1>
 {% endblock %}
 
 {% block extrastyle %}
 {{ block.super }}
 <style>
-    /* House of Hair brand colors */
+    /* Clean professional styling */
     :root {
-        --primary-color: #8B4513;
-        --secondary-color: #D2691E;
-        --accent-color: #F5DEB3;
+        --brand-brown: #8B6F47;
+        --brand-tan: #D4A574;
+        --brand-cream: #F5E6D3;
     }
     
-    /* Header styling */
     #header {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        background: var(--brand-brown);
         color: white;
+        padding: 15px 20px;
     }
     
     #site-name a {
         color: white;
-        text-decoration: none;
+        font-size: 1.1em;
+        font-weight: 500;
     }
     
     #site-name a:hover {
-        color: var(--accent-color);
+        color: var(--brand-cream);
     }
     
-    /* Breadcrumbs */
     div.breadcrumbs {
-        background: var(--accent-color);
-        color: var(--primary-color);
+        background: var(--brand-cream);
+        color: #333;
+        padding: 12px 20px;
     }
     
     div.breadcrumbs a {
-        color: var(--primary-color);
+        color: var(--brand-brown);
+        font-weight: 500;
     }
     
-    /* Buttons */
     .button, input[type=submit], input[type=button], .submit-row input, a.button {
-        background: var(--primary-color);
+        background: var(--brand-brown);
+        color: white;
         border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
     }
     
     .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
-        background: var(--secondary-color);
+        background: var(--brand-tan);
     }
     
-    /* Links */
     a:link, a:visited {
-        color: var(--primary-color);
+        color: var(--brand-brown);
     }
     
-    a:hover {
-        color: var(--secondary-color);
+    a:hover, a:focus {
+        color: var(--brand-tan);
     }
     
-    /* Module headers */
     .module h2, .module caption, .inline-group h2 {
-        background: var(--primary-color);
+        background: var(--brand-brown);
+        color: white;
     }
     
-    /* Selected items */
-    .selector-chosen h2 {
-        background: var(--primary-color);
-    }
-    
-    /* Calendar */
-    .calendarbox .calendarnav-previous, .calendarbox .calendarnav-next {
-        background: var(--primary-color);
-    }
-    
-    /* Object tools */
     .object-tools a {
-        background: var(--primary-color);
+        background: var(--brand-brown);
     }
     
     .object-tools a:hover {
-        background: var(--secondary-color);
+        background: var(--brand-tan);
     }
     
-    /* Changelist filters */
     #changelist-filter li.selected a {
-        color: var(--primary-color);
+        color: var(--brand-brown);
         font-weight: bold;
     }
     
-    /* Login page */
-    .login #header h1 {
-        margin: 0;
+    .selector-chosen h2 {
+        background: var(--brand-brown);
     }
     
-    .login #header h1 a {
-        color: var(--primary-color);
+    /* Dashboard improvements */
+    #content-main {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .module {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 </style>
 {% endblock %}
