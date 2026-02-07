@@ -179,7 +179,7 @@ export default function AdminDashboard() {
           </div>
           <div className="stat-card">
             <div className="stat-number">
-              £{bookings.reduce((sum, b) => sum + (b.price || 0), 0).toFixed(2)}
+              £{(bookings.reduce((sum, b) => sum + (Number(b.price) || 0), 0)).toFixed(2)}
             </div>
             <div className="stat-label">Total Revenue</div>
           </div>
