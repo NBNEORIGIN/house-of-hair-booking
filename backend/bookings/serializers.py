@@ -31,13 +31,16 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.name', read_only=True)
+    client_email = serializers.CharField(source='client.email', read_only=True)
+    client_phone = serializers.CharField(source='client.phone', read_only=True)
     service_name = serializers.CharField(source='service.name', read_only=True)
     staff_name = serializers.CharField(source='staff.name', read_only=True)
+    price = serializers.DecimalField(source='service.price', max_digits=10, decimal_places=2, read_only=True)
     
     class Meta:
         model = Booking
-        fields = ['id', 'client', 'client_name', 'service', 'service_name', 'staff', 'staff_name', 
-                  'start_time', 'end_time', 'status', 'notes', 'created_at', 'updated_at']
+        fields = ['id', 'client', 'client_name', 'client_email', 'client_phone', 'service', 'service_name', 
+                  'staff', 'staff_name', 'start_time', 'end_time', 'status', 'price', 'notes', 'created_at', 'updated_at']
         read_only_fields = ['end_time', 'created_at', 'updated_at']
 
 

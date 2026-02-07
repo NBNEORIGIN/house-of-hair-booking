@@ -226,6 +226,14 @@
   transform: translateY(-2px);
 }
 
+.cancel-btn {
+  background: #dc3545 !important;
+}
+
+.cancel-btn:hover {
+  background: #c82333 !important;
+}
+
 .admin-footer {
   text-align: center;
   padding: 30px;

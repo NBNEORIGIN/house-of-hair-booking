@@ -45,6 +45,33 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleCancelBooking = async (bookingId: number) => {
+    if (!confirm('Are you sure you want to cancel this booking? The time slot will become available for other customers.')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/bookings/${bookingId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'cancelled' }),
+      })
+
+      if (response.ok) {
+        alert('Booking cancelled successfully. The time slot is now available.')
+        fetchBookings()
+        setViewingBooking(null)
+      } else {
+        alert('Failed to cancel booking')
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error)
+      alert('Error cancelling booking')
+    }
+  }
+
   const filteredBookings = bookings.filter(booking => {
     const matchesFilter = filter === 'all' || booking.status === filter
     const matchesSearch = 
@@ -231,14 +258,25 @@ export default function AdminDashboard() {
                           {booking.status}
                         </span>
                       </td>
-                      <td>£{booking.price}</td>
+                      <td>£{booking.price ? booking.price.toFixed(2) : '0.00'}</td>
                       <td>
-                        <button 
-                          className="action-btn"
-                          onClick={() => setViewingBooking(booking)}
-                        >
-                          View
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button 
+                            className="action-btn"
+                            onClick={() => setViewingBooking(booking)}
+                          >
+                            View
+                          </button>
+                          {(booking.status === 'confirmed' || booking.status === 'pending') && (
+                            <button 
+                              className="action-btn cancel-btn"
+                              onClick={() => handleCancelBooking(booking.id)}
+                              style={{ background: '#dc3545' }}
+                            >
+                              Cancel
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -294,8 +332,16 @@ export default function AdminDashboard() {
                 </span>
               </div>
               <div>
-                <strong>Price:</strong> £{viewingBooking.price}
+                <strong>Price:</strong> £{viewingBooking.price ? viewingBooking.price.toFixed(2) : '0.00'}
               </div>
+              {(viewingBooking.status === 'confirmed' || viewingBooking.status === 'pending') && (
+                <button 
+                  onClick={() => handleCancelBooking(viewingBooking.id)}
+                  style={{ background: '#dc3545', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '10px' }}
+                >
+                  Cancel Booking
+                </button>
+              )}
               {viewingBooking.notes && (
                 <div>
                   <strong>Notes:</strong> {viewingBooking.notes}
