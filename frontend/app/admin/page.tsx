@@ -103,7 +103,7 @@ export default function AdminDashboard() {
       format(new Date(b.start_time), 'MMM d, yyyy'),
       format(new Date(b.start_time), 'h:mm a'),
       b.status,
-      `£${b.price}`,
+      `£${b.price ? Number(b.price).toFixed(2) : '0.00'}`,
       b.notes || ''
     ])
     
@@ -258,7 +258,7 @@ export default function AdminDashboard() {
                           {booking.status}
                         </span>
                       </td>
-                      <td>£{booking.price ? booking.price.toFixed(2) : '0.00'}</td>
+                      <td>£{booking.price ? Number(booking.price).toFixed(2) : '0.00'}</td>
                       <td>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button 
@@ -332,7 +332,7 @@ export default function AdminDashboard() {
                 </span>
               </div>
               <div>
-                <strong>Price:</strong> £{viewingBooking.price ? viewingBooking.price.toFixed(2) : '0.00'}
+                <strong>Price:</strong> £{viewingBooking.price ? Number(viewingBooking.price).toFixed(2) : '0.00'}
               </div>
               {(viewingBooking.status === 'confirmed' || viewingBooking.status === 'pending') && (
                 <button 
